@@ -1,4 +1,4 @@
-export const TaskList = ({ todos, onToggleCheckbox, deleteBtn }) => {
+export const TaskList = ({ todos, onToggleCheckbox, handleDelete }) => {
   return (
     <>
       {todos.map((task) => {
@@ -12,14 +12,12 @@ export const TaskList = ({ todos, onToggleCheckbox, deleteBtn }) => {
                 type="checkbox"
                 onClick={() => onToggleCheckbox(task.id)}
               />
-              <p className={`${task.checked && "line-through"}`}>
-                {task.value}
-              </p>
+              <p className={`${task.checked && "line-through"}`}>{task.text}</p>
             </div>
 
             <button
               className="bg-[#FEF2F2] text-[#EF4444] p-1 rounded-sm text-sm"
-              onClick={() => deleteBtn(task.id)}
+              onClick={() => handleDelete(task.id)}
             >
               Delete
             </button>
