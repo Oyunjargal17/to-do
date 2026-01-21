@@ -6,6 +6,7 @@ import { TaskList } from "./TaskList";
 export const ToDoList = () => {
   const [inputValue, setInputValue] = useState("");
   const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState("all");
 
   // console.log(todos);
 
@@ -26,25 +27,45 @@ export const ToDoList = () => {
     setInputValue(event.target.value);
   };
 
-  const onToggleCheckbox = (taskId) => {
+  const onToggleCheckbox = (todoId) => {
     const newTodo = todos.map((todo) => {
-      if (todo.id !== taskId) {
+      if (todo.id !== todoId) {
         return todo;
+      } else {
+        return { ...todo, checked: !todo.checked };
       }
-      return {
-        ...todo,
-        checked: !todo.checked,
-      };
     });
     setTodos(newTodo);
   };
 
-  const handleDelete = (taskId) => {
-    console.log("taskId:", taskId);
-    const newDelete = todos.filter((todo) => todo.id !== taskId);
+  const handleDelete = (todoId) => {
+    const newDelete = todos.filter((todo) => todo.id !== todoId);
     setTodos(newDelete);
     console.log(newDelete);
   };
+  const completedDelete = (todoId) => {
+    const newDelete = todos.filter((todo) => !todo.checked);
+    setTodos(newDelete);
+    console.log(newDelete);
+  };
+
+  const filterTodos = (filterValue) => {
+    setFilter(filterValue);
+  };
+
+  const filteredTodo = todos.filter((todo) => {
+    if (filter === "active" && !todo.checked) {
+      return true;
+    }
+    if (filter === "completed" && todo.checked) {
+      return true;
+    }
+    if (filter === "all") {
+      return true;
+    }
+  });
+
+  const checkedTasks = todos.filter((todo) => todo.checked).length;
 
   return (
     <div className="flex justify-center min-h-screen items-center bg-[#f3f4f6] font-sans">
@@ -67,13 +88,22 @@ export const ToDoList = () => {
             </button>
           </div>
           <div className="flex gap-3 justify-start p-5">
-            <button className="bg-[#F3F4F6] h-fit p-2  rounded-sm text-center">
+            <button
+              onClick={() => filterTodos("all")}
+              className={` h-fit p-2  rounded-sm text-center cursor-pointer ${filter === "all" ? "bg-[#3C82F6] text-white" : "bg-[#F3F4F6]"}`}
+            >
               All
             </button>
-            <button className="bg-[#F3F4F6] h-fit p-2 rounded-sm text-center">
+            <button
+              onClick={() => filterTodos("active")}
+              className={` h-fit p-2 rounded-sm text-center cursor-pointer ${filter === "active" ? "bg-[#3C82F6] text-white" : "bg-[#F3F4F6]"}`}
+            >
               Active
             </button>
-            <button className="bg-[#F3F4F6] h-fit p-2 rounded-sm text-center">
+            <button
+              onClick={() => filterTodos("completed")}
+              className={`h-fit p-2 rounded-sm text-center cursor-pointer ${filter === "completed" ? "bg-[#3C82F6] text-white" : "bg-[#F3F4F6]"}`}
+            >
               Completed
             </button>
           </div>
@@ -82,11 +112,25 @@ export const ToDoList = () => {
               No tasks yet. Add one above!
             </p>
           ) : (
-            <TaskList
-              todos={todos}
-              onToggleCheckbox={onToggleCheckbox}
-              handleDelete={handleDelete}
-            />
+            <div>
+              <TaskList
+                todos={filteredTodo}
+                onToggleCheckbox={onToggleCheckbox}
+                handleDelete={handleDelete}
+              />
+              <div className="border-b border-[#6B7280] mt-2"></div>
+              <div className="flex justify-between">
+                <p className="text-[#6B7280] text-sm p-2">
+                  {checkedTasks} of {todos.length} tasks completed
+                </p>
+                <button
+                  className="text-[#EF4444] text-sm"
+                  onClick={completedDelete}
+                >
+                  Clear completed
+                </button>
+              </div>
+            </div>
           )}
 
           <div className="flex gap-2 justify-center p-4">
