@@ -8,8 +8,6 @@ export const ToDoList = () => {
   const [todos, setTodos] = useState([]);
   const [filter, setFilter] = useState("all");
 
-  // console.log(todos);
-
   const handleAdd = () => {
     const newTodo = {
       id: Date.now(),
@@ -39,14 +37,20 @@ export const ToDoList = () => {
   };
 
   const handleDelete = (todoId) => {
-    const newDelete = todos.filter((todo) => todo.id !== todoId);
-    setTodos(newDelete);
-    console.log(newDelete);
+    const isItTrue = confirm("Та устгахдаа итгэлтэй байна уу?");
+    if (isItTrue) {
+      const newDelete = todos.filter((todo) => todo.id !== todoId);
+      setTodos(newDelete);
+      return;
+    }
   };
   const completedDelete = (todoId) => {
-    const newDelete = todos.filter((todo) => !todo.checked);
-    setTodos(newDelete);
-    console.log(newDelete);
+    const isItTrue = confirm("Та устгахдаа итгэлтэй байна уу?");
+    if (isItTrue) {
+      const newDelete = todos.filter((todo) => !todo.checked);
+      setTodos(newDelete);
+      return;
+    }
   };
 
   const filterTodos = (filterValue) => {
@@ -142,45 +146,3 @@ export const ToDoList = () => {
     </div>
   );
 };
-
-// "use client";
-
-// import { useState } from "react";
-
-// export const ToDoList = () => {
-//   const [value, setValue] = useState("");
-//   const [task, setTask] = useState([]);
-
-//   console.log(setValue);
-//   const handleInput = (e) => setValue(e.target.value);
-
-//   const handleAdd = () => {
-//     setTask([...task, value]);
-//     setValue("");
-//   };
-
-//   return (
-//     <div>
-//       <div className="flex flex-col justify-center items-center min-h-screen">
-//         <h1>To Do List</h1>
-//         <div className="flex gap-2">
-//           <input
-//             value={value}
-//             onChange={handleInput}
-//             type="text"
-//             className="border"
-//           />
-//           <button className="bg-gray-300" onClick={handleAdd}>
-//             Add
-//           </button>
-//         </div>
-//         {task.map((item, index) => (
-//           <div key={index}>
-//             <input type="checkbox" />
-//             <span>{item}</span>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
